@@ -17,7 +17,6 @@ export function InputDate({ value, ...props }: CalenderProps) {
       />
       <button className="w-full p-3 bg-zinc-50 rounded-lg shadow-md text-base focus-within:shadow-lg cursor-pointer focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-1 focus-visible:ring-offset-black">
         <p className="text-start">
-          {/*!value ? "dd/mm/aaaa" : value*/}
           {dateFormat(value)}
         </p>
       </button>
