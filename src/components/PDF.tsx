@@ -1,3 +1,4 @@
+import { dateFormat } from '@/utils/dateFormart';
 import {
   Page,
   Text,
@@ -529,7 +530,7 @@ export function PDF({
                 </View>
                 <View style={styles.tableItemHead9}>
                   <Text style={styles.textType1}>
-                    {finalPaymentDate}
+                    {dateFormat(finalPaymentDate)}
                   </Text>
                 </View>
               </View>
@@ -557,7 +558,7 @@ export function PDF({
           </View>
         </View>
         <View style={{ marginTop: 32 }}>
-          <Text style={styles.textType2}>{date}.</Text>
+          <Text style={styles.textType2}>{dateFormat(date)}.</Text>
           <Text style={styles.textType1}>{cityandstateofPedro}</Text>
         </View>
       </Page>
