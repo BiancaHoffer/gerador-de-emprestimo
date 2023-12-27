@@ -17,7 +17,6 @@ import axios from 'axios';
 import { InputDate } from '@/components/InputDate';
 import { dateFormat } from '@/utils/dateFormart';
 import { Button } from '@/components/Button';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 const maritalStateList = [
@@ -44,27 +43,12 @@ export default function Home() {
   const [maritalState, setMaritalState] = useState(maritalStateList[0]);
 
   const [valueLoan, setValueLoan] = useState("");
-  const [finalPaymentDate, setFinalPaymentDate] = useState("")
+  const [finalPaymentDate, setFinalPaymentDate] = useState("");
 
   const today = new Date().toISOString();
   const [date, setDate] = useState(dateFormat(today));
 
-  useEffect(() => {
-    async function consultingCEP() {
-      try {
-        const response = await axios.get(`https://viacep.com.br/ws/${CEP}/json/`);
-        const data = response.data;
-
-        setAddress(`${data.logradouro}, ${data.bairro}`);
-        setCity(data.localidade);
-        setState(data.uf);
-      } catch (error) {
-        console.error('Erro ao consultar o CEP:', error);
-      }
-    };
-
-    consultingCEP()
-  }, [CEP]);
+  const [isClient, setIsClient] = useState(false);
 
   function generateContract() {
     setAddress("");
@@ -83,7 +67,7 @@ export default function Home() {
 
     setValueLoan("");
     setFinalPaymentDate("");
-  }
+  };
 
   function handleDate(event: any) {
     const date = event.target.value;
@@ -93,7 +77,28 @@ export default function Home() {
     } else {
       setDate(dateFormat(date))
     }
-  }
+  };
+
+  useEffect(() => {
+    async function consultingCEP() {
+      try {
+        const response = await axios.get(`https://viacep.com.br/ws/${CEP}/json/`);
+        const data = response.data;
+
+        setAddress(`${data.logradouro}, ${data.bairro}`);
+        setCity(data.localidade);
+        setState(data.uf);
+      } catch (error) {
+        console.error('Erro ao consultar o CEP:', error);
+      }
+    };
+
+    consultingCEP()
+  }, [CEP]);
+
+  useEffect(() => {
+    setIsClient(true)
+  }, []);
 
   return (
     <main className='bg-zinc-100 w-full flex justify-center items-center flex-col gap-5 px-4 py-10'>
@@ -240,46 +245,48 @@ export default function Home() {
             </div>
           </div>
         </form>
-        <div className="mt-8 flex items-center justify-center w-full gap-6 sm:flex-col sm:gap-3">
-          <PDFDownloadLink
-            className="w-full flex items-center justify-center"
-            fileName={`Contrato - ${name}.pdf`}
-            document={
-              <PDF
-                address={address}
-                cep={CEP}
-                city={city}
-                state={state}
-                number={number}
-                name={name}
-                cpf={CPF}
-                rg={RG}
-                phone={phone}
-                maritalState={maritalState.name}
-                profession={profession}
-                nationality={nationality}
-                valueLoal={valueLoan}
-                finalPaymentDate={finalPaymentDate}
-                date={date}
-                cityandstateofPedro="Manaus, Amazonas."
-              />
-            }
-          >
-            {({ url }) =>
-              <div className="w-full flex items-center justify-center gap-3 sm:flex-col">
-                <Link
-                  href={String(url)}
-                  target="_blank"
-                  className="w-full flex items-center justify-center"
-                >
-                  <Button onClick={generateContract} title="Conferir contrato" />
-                </Link>
 
-                <Button title="Baixar contrato" />
-              </div>
-            }
-          </PDFDownloadLink>
-        </div>
+        {isClient &&
+          <div className="mt-8 flex items-center justify-center w-full gap-6 sm:flex-col sm:gap-3">
+            <PDFDownloadLink
+              className="w-full flex items-center justify-center"
+              fileName={`Contrato - ${name}.pdf`}
+              document={
+                <PDF
+                  address={address}
+                  cep={CEP}
+                  city={city}
+                  state={state}
+                  number={number}
+                  name={name}
+                  cpf={CPF}
+                  rg={RG}
+                  phone={phone}
+                  maritalState={maritalState.name}
+                  profession={profession}
+                  nationality={nationality}
+                  valueLoal={valueLoan}
+                  finalPaymentDate={finalPaymentDate}
+                  date={date}
+                  cityandstateofPedro="Manaus, Amazonas."
+                />
+              }
+            >
+              {({ url }) =>
+                <div className="w-full flex items-center justify-center gap-3 sm:flex-col">
+                  <Link
+                    href={String(url)}
+                    target="_blank"
+                    className="w-full flex items-center justify-center"
+                  >
+                    <Button onClick={generateContract} title="Conferir contrato" />
+                  </Link>
+                  <Button title="Baixar contrato" />
+                </div>
+              }
+            </PDFDownloadLink>
+          </div>
+        }
       </div>
     </main>
   )
