@@ -279,9 +279,9 @@ export default function Home() {
                     target="_blank"
                     className="w-full flex items-center justify-center"
                   >
-                    <Button onClick={generateContract} title="Conferir contrato" />
+                    <Button title="Conferir contrato" />
                   </Link>
-                  <Button title="Baixar contrato" />
+                  <Button title="Baixar contrato" onClick={generateContract} />
                 </div>
               }
             </PDFDownloadLink>
