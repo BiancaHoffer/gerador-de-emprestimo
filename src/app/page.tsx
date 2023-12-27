@@ -43,10 +43,11 @@ export default function Home() {
   const [maritalState, setMaritalState] = useState(maritalStateList[0]);
 
   const [valueLoan, setValueLoan] = useState("");
-  const [finalPaymentDate, setFinalPaymentDate] = useState("");
 
   const today = new Date().toISOString();
-  const [date, setDate] = useState(dateFormat(today));
+
+  const [finalPaymentDate, setFinalPaymentDate] = useState("");
+  const [date, setDate] = useState(today);
 
   const [isClient, setIsClient] = useState(false);
 
@@ -75,7 +76,7 @@ export default function Home() {
     if (date === "") {
       setDate(today)
     } else {
-      setDate(dateFormat(date))
+      setDate(date)
     }
   };
 
@@ -223,7 +224,7 @@ export default function Home() {
                 </label>
                 <InputDate
                   value={finalPaymentDate}
-                  onChange={e => setFinalPaymentDate(dateFormat(e.target.value))}
+                  onChange={e => setFinalPaymentDate(e.target.value)}
                 />
               </fieldset>
             </div>
