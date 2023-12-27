@@ -1,11 +1,17 @@
 "use client"
 
-import { RegexNumber, maskCEP, maskCPF, maskCurrency, maskPhone, maskRG } from '@/Masks/masks';
+import {
+  RegexNumber,
+  maskCEP,
+  maskCPF,
+  maskCurrency,
+  maskPhone
+} from '@/Masks/masks';
 import { Input } from '@/components/Input';
 import { PDF } from '@/components/PDF';
 import { Select } from '@/components/Select';
-import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
-import { FormEvent, useEffect, useState } from 'react';
+import { PDFDownloadLink, } from '@react-pdf/renderer';
+import { useEffect, useState } from 'react';
 
 import axios from 'axios';
 import { InputDate } from '@/components/InputDate';
@@ -43,8 +49,6 @@ export default function Home() {
   const today = new Date().toISOString();
   const [date, setDate] = useState(dateFormat(today));
 
-  const router = useRouter();
-
   useEffect(() => {
     async function consultingCEP() {
       try {
@@ -79,6 +83,16 @@ export default function Home() {
 
     setValueLoan("");
     setFinalPaymentDate("");
+  }
+
+  function handleDate(event: any) {
+    const date = event.target.value;
+
+    if (date === "") {
+      setDate(today)
+    } else {
+      setDate(dateFormat(date))
+    }
   }
 
   return (
@@ -220,8 +234,7 @@ export default function Home() {
                 </label>
                 <InputDate
                   value={date}
-                  /**@ts-ignore */
-                  onChange={() => handleDate}
+                  onChange={handleDate}
                 />
               </fieldset>
             </div>
